@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Truck, UserCheck, DollarSign, RefreshCcw } from "lucide-react";
-import pricedrop from "../assets/pricedrop.jpg"; // your banner image
+import { Truck, UserCheck, DollarSign, RefreshCcw, ChevronLeft, ChevronRight } from "lucide-react";
+import pricedrop from "../assets/pricedrop.jpg";
 import ragimalt from "../assets/ragimalt.png"; 
 import tinbig from "../assets/tinbig.jpg";
 import gunpowder from "../assets/gunpowder.jpg";
@@ -10,9 +10,25 @@ import powder from "../assets/powder.jpg";
 import ragicookie from "../assets/ragi-chocolate-cookie.png";
 import hurihittu from "../assets/hurihittu.png";
 import teabag from "../assets/teabag.png";
+import wemill2 from "../assets/wemill2.png";
 
 const Home = () => {
-  // Sample product data - replace with your actual products
+  const scrollContainerRef = useRef(null);
+  const [currentBanner, setCurrentBanner] = useState(0);
+
+  const banners = [
+    {
+      id: 1,
+      src: pricedrop,
+      alt: "Delightico Banner 1 - Special Offers"
+    },
+    {
+      id: 2,
+      src: wemill2,
+      alt: "Delightico Banner 2 - Premium Products"
+    }
+  ];
+
   const trendingProducts = [
     {
       id: 1,
@@ -26,7 +42,7 @@ const Home = () => {
     },
     {
       id: 3,
-      name: "Gun Powder ",
+      name: "Gun Powder",
       image: gunpowder
     },
     {
@@ -54,21 +70,105 @@ const Home = () => {
       name: "Huri Hittu",
       image: hurihittu
     }
-    
   ];
+
+  const scrollToBanner = (index) => {
+    if (scrollContainerRef.current) {
+      const container = scrollContainerRef.current;
+      const bannerWidth = container.clientWidth;
+      container.scrollTo({
+        left: index * bannerWidth,
+        behavior: 'smooth'
+      });
+      setCurrentBanner(index);
+    }
+  };
+
+  const nextBanner = () => {
+    const nextIndex = (currentBanner + 1) % banners.length;
+    scrollToBanner(nextIndex);
+  };
+
+  const prevBanner = () => {
+    const prevIndex = (currentBanner - 1 + banners.length) % banners.length;
+    scrollToBanner(prevIndex);
+  };
+
+  // Auto-advance banners
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      nextBanner();
+    }, 5000); // Change banner every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [currentBanner]);
 
   return (
     <div className="bg-[#fffbea] w-full">
-
-      {/* ===== Banner Section ===== */}
-      <section className="flex justify-center w-full">
-        <div className="w-full">
-          <img
-            src={pricedrop}
-            alt="Delightico Banner"
-            className="w-full h-auto rounded-lg shadow-md object-cover"
-          />
+      {/* ===== Improved Banner Section ===== */}
+      <section className="w-full relative">
+        {/* Banner Container */}
+        <div 
+          ref={scrollContainerRef}
+          className="w-full overflow-x-hidden scroll-smooth"
+        >
+          <div className="flex">
+            {banners.map((banner) => (
+              <div 
+                key={banner.id}
+                className="w-full flex-shrink-0"
+              >
+                <motion.img
+                  initial={{ opacity: 0.8 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5 }}
+                  src={banner.src}
+                  alt={banner.alt}
+                  className="w-full h-64 md:h-80 lg:h-115 object-cover"
+                />
+              </div>
+            ))}
+          </div>
         </div>
+
+        {/* Navigation Arrows */}
+        <button
+          onClick={prevBanner}
+          className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white 
+                     text-gray-800 rounded-full p-2 shadow-lg transition-all duration-200 
+                     hover:scale-110 focus:outline-none focus:ring-2 focus:ring-green-500"
+          aria-label="Previous banner"
+        >
+          <ChevronLeft size={24} />
+        </button>
+
+        <button
+          onClick={nextBanner}
+          className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white 
+                     text-gray-800 rounded-full p-2 shadow-lg transition-all duration-200 
+                     hover:scale-110 focus:outline-none focus:ring-2 focus:ring-green-500"
+          aria-label="Next banner"
+        >
+          <ChevronRight size={24} />
+        </button>
+
+        {/* Navigation Dots - Positioned below the banner */}
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+          {banners.map((banner, index) => (
+            <button
+              key={banner.id}
+              onClick={() => scrollToBanner(index)}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                index === currentBanner 
+                  ? 'bg-white scale-125' 
+                  : 'bg-white/60 hover:bg-white/80'
+              }`}
+              aria-label={`Go to banner ${index + 1}`}
+            />
+          ))}
+        </div>
+
+        
       </section>
 
       {/* ===== Welcome Section ===== */}
@@ -211,7 +311,6 @@ const Home = () => {
           </motion.div>
         </div>
       </section>
-
     </div>
   );
 };
