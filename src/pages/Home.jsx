@@ -11,21 +11,25 @@ import ragicookie from "../assets/ragi-chocolate-cookie.png";
 import hurihittu from "../assets/hurihittu.png";
 import teabag from "../assets/teabag.png";
 import wemill2 from "../assets/wemill2.png";
+import moringaBanner from "../assets/moringaBanner.png";
+import { Link } from "react-router-dom";
+// REMOVED the duplicate motion import
 
 const Home = () => {
   const scrollContainerRef = useRef(null);
   const [currentBanner, setCurrentBanner] = useState(0);
+  const MotionLink = motion(Link);
 
   const banners = [
     {
       id: 1,
-      src: pricedrop,
-      alt: "Delightico Banner 1 - Special Offers"
+      src: wemill2,
+      alt: "Delightico Banner 2 - Premium Products"
     },
     {
       id: 2,
-      src: wemill2,
-      alt: "Delightico Banner 2 - Premium Products"
+      src: moringaBanner,
+      alt: "Delightico Banner 3 - Moringa Products"
     }
   ];
 
@@ -167,8 +171,6 @@ const Home = () => {
             />
           ))}
         </div>
-
-        
       </section>
 
       {/* ===== Welcome Section ===== */}
@@ -191,14 +193,16 @@ const Home = () => {
           Taste the Health in Every Bite
         </motion.p>
 
-        <motion.button
+        <MotionLink
+          to="/products"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           className="mt-6 px-6 py-3 bg-gradient-to-r from-green-400 to-green-700
-                     text-white rounded-2xl shadow-lg font-semibold font-poppins"
+                     text-white rounded-2xl shadow-lg font-semibold font-poppins
+                     inline-block"
         >
           Shop Now
-        </motion.button>
+        </MotionLink>
       </section>
 
       {/* ===== Features Section ===== */}
@@ -299,15 +303,16 @@ const Home = () => {
             viewport={{ once: true }}
             className="text-center mt-12"
           >
-            <motion.button
+            <MotionLink
+              to="/products"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="px-8 py-3 bg-gradient-to-r from-green-500 to-green-700 
                          text-white rounded-xl shadow-lg font-semibold font-poppins
-                         hover:shadow-xl transition-all duration-300 text-lg"
+                         hover:shadow-xl transition-all duration-300 text-lg inline-block"
             >
               View All Products
-            </motion.button>
+            </MotionLink>
           </motion.div>
         </div>
       </section>

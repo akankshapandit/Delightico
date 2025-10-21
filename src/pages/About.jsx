@@ -73,50 +73,55 @@ export default function About() {
           </div>
 
           {/* Mission Visual */}
-          <div className={`relative transition-all duration-1000 delay-700 ${animated ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}>
-            <div className="bg-amber-50 rounded-2xl shadow-lg p-8 transform hover:scale-105 transition-transform duration-300 border border-amber-200">
-              <div className="grid grid-cols-2 gap-6">
-                {/* Certified Products */}
-                <div className="bg-green-50 rounded-xl p-6 text-center border border-green-200">
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <FaLeaf className="text-green-700 text-2xl" />
-                  </div>
-                  <h3 className="font-bold text-amber-900 mb-2">Certified Products</h3>
-                  <p className="text-sm text-amber-700">100% Organic Certified</p>
-                </div>
+<div
+  className={`relative transition-all duration-1000 delay-700 ${
+    animated ? "opacity-100 translate-x-0" : "opacity-0 translate-x-10"
+  }`}
+>
+  <div className="bg-gradient-to-br from-white via-green-50 to-teal-100 rounded-2xl shadow-xl p-8 border border-green-100 backdrop-blur-sm">
+    <div className="grid grid-cols-2 gap-6">
+      {/* Certified Products */}
+      <div className="bg-white/70 backdrop-blur-md rounded-xl p-6 text-center border border-green-100 shadow-sm hover:shadow-md transition-all duration-300">
+        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <FaLeaf className="text-green-600 text-2xl" />
+        </div>
+        <h3 className="font-semibold text-green-800 mb-2">Certified Products</h3>
+        <p className="text-sm text-gray-600">100% Organic & Verified Quality</p>
+      </div>
 
-                {/* Product Range */}
-                <div className="bg-amber-100 rounded-xl p-6 text-center border border-amber-300">
-                  <div className="w-16 h-16 bg-amber-200 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <FaShoppingBag className="text-amber-700 text-2xl" />
-                  </div>
-                  <h3 className="font-bold text-amber-900 mb-2">PRODUCT</h3>
-                  <p className="text-sm text-amber-700">Various Quality Items</p>
-                </div>
+      {/* Product Range */}
+      <div className="bg-white/70 backdrop-blur-md rounded-xl p-6 text-center border border-teal-100 shadow-sm hover:shadow-md transition-all duration-300">
+        <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <FaShoppingBag className="text-teal-600 text-2xl" />
+        </div>
+        <h3 className="font-semibold text-green-800 mb-2">Product Range</h3>
+        <p className="text-sm text-gray-600">Naturally Healthy Selections</p>
+      </div>
 
-                {/* Organic Products */}
-                <div className="col-span-2 bg-gradient-to-r from-green-600 to-amber-600 rounded-xl p-6 text-center text-white">
-                  <h3 className="text-2xl font-bold mb-2">Organic Products!</h3>
-                  <p className="text-lg">We Deal With Various Quality</p>
-                </div>
+      {/* Organic Products Highlight */}
+      <div className="col-span-2 bg-gradient-to-r from-green-600 to-teal-600 rounded-xl p-6 text-center text-white shadow-lg">
+        <h3 className="text-2xl font-bold mb-1">Fresh. Natural. Organic.</h3>
+        <p className="text-lg text-green-100">Bringing nature’s goodness to your doorstep</p>
+      </div>
 
-                {/* Product Examples */}
-                <div className="bg-amber-50 rounded-xl p-4 text-center border border-amber-200">
-                  <h4 className="font-semibold text-amber-900 mb-2">Ragi Flour</h4>
-                  <div className="w-12 h-12 bg-amber-300 rounded-full mx-auto"></div>
-                </div>
-                <div className="bg-green-50 rounded-xl p-4 text-center border border-green-200">
-                  <h4 className="font-semibold text-amber-900 mb-2">Ragi Middle Mix</h4>
-                  <div className="w-12 h-12 bg-green-300 rounded-full mx-auto"></div>
-                </div>
-              </div>
+      {/* Product Examples */}
+      <div className="bg-white/70 backdrop-blur-md rounded-xl p-4 text-center border border-green-100 hover:shadow-md transition-all duration-300">
+        <h4 className="font-semibold text-green-800 mb-2">Ragi Cookies</h4>
+        <div className="w-12 h-12 bg-green-200 rounded-full mx-auto"></div>
+      </div>
+      <div className="bg-white/70 backdrop-blur-md rounded-xl p-4 text-center border border-teal-100 hover:shadow-md transition-all duration-300">
+        <h4 className="font-semibold text-green-800 mb-2">Ragi Flour</h4>
+        <div className="w-12 h-12 bg-teal-200 rounded-full mx-auto"></div>
+      </div>
+    </div>
 
-              {/* CTA Button */}
-              <button className="w-full mt-6 bg-gradient-to-r from-green-700 to-amber-700 text-white py-3 rounded-xl font-bold hover:from-green-800 hover:to-amber-800 transition-all duration-300 transform hover:scale-105 shadow-lg">
-                START SHOPPING
-              </button>
-            </div>
-          </div>
+    {/* CTA Button */}
+    <button className="w-full mt-6 bg-gradient-to-r from-green-600 to-teal-600 text-white py-3 rounded-xl font-semibold hover:from-green-700 hover:to-teal-700 transition-transform duration-300 transform hover:scale-105 shadow-lg">
+      Shop Now
+    </button>
+  </div>
+</div>
+
         </div>
       </section>
 
