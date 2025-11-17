@@ -10,6 +10,9 @@ import hurihittu from '../assets/hurihittu.png';
 import powder from '../assets/powder.jpg';
 import healthmix from '../assets/healthmix.png';
 
+import { useAuth } from '../context/AuthContext';
+import AIPostGenerator from "../components/AIPostGeneration";
+
 // Sample products for "You might be interested in" section - MOVED TO TOP
 const sampleProducts = [
   {
@@ -120,6 +123,9 @@ export default function Products() {
   const [loading, setLoading] = useState(true);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [addedProductName, setAddedProductName] = useState("");
+  const [showAIGenerator, setShowAIGenerator] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const { user } = useAuth();
 
   useEffect(() => {
     setLoading(true);
@@ -129,23 +135,34 @@ export default function Products() {
       .finally(() => setLoading(false));
   }, []);
 
+  // Debug state changes
+  useEffect(() => {
+    console.log('🔵 STATE UPDATE - showAIGenerator:', showAIGenerator);
+    console.log('🔵 STATE UPDATE - selectedProduct:', selectedProduct);
+    
+    if (showAIGenerator && selectedProduct) {
+      console.log('🎉 MODAL SHOULD BE VISIBLE!');
+      console.log('🎉 Product:', selectedProduct.name);
+    }
+  }, [showAIGenerator, selectedProduct]);
+
   // Brands data - Fixed the NOFH brand filter
   const brands = [
-    { name: "All", count: products.length },
-    { name: "Maja Nature Food", count: products.filter(p => p.brand === "Maja Nature Food").length },
-    { name: "WeMill", count: products.filter(p => p.brand === "WeMill").length },
-    { name: "NOFH", count: products.filter(p => p.brand === "NOFH").length },
-    { name: "Sanvi Millets", count: products.filter(p => p.brand === "Sanvi Millets").length },
-  ];
+  { name: "All", count: Array.isArray(products) ? products.length : 0 },
+  { name: "Maja Nature Food", count: Array.isArray(products) ? products.filter(p => p.brand === "Maja Nature Food").length : 0 },
+  { name: "WeMill", count: Array.isArray(products) ? products.filter(p => p.brand === "WeMill").length : 0 },
+  { name: "NOFH", count: Array.isArray(products) ? products.filter(p => p.brand === "NOFH").length : 0 },
+  { name: "Sanvi Millets", count: Array.isArray(products) ? products.filter(p => p.brand === "Sanvi Millets").length : 0 },
+];
 
-  const filtered = products.filter((p) => {
-    const matchesSearch = p.name.toLowerCase().includes(query.toLowerCase()) ||
-                         p.brand?.toLowerCase().includes(query.toLowerCase());
-    const matchesPrice = p.price >= priceRange.min && p.price <= priceRange.max;
-    const matchesBrand = selectedBrand === "All" || p.brand === selectedBrand;
-    
-    return matchesSearch && matchesPrice && matchesBrand;
-  });
+ const filtered = Array.isArray(products) ? products.filter((p) => {
+  const matchesSearch = p.name?.toLowerCase().includes(query.toLowerCase()) ||
+                       p.brand?.toLowerCase().includes(query.toLowerCase());
+  const matchesPrice = p.price >= priceRange.min && p.price <= priceRange.max;
+  const matchesBrand = selectedBrand === "All" || p.brand === selectedBrand;
+  
+  return matchesSearch && matchesPrice && matchesBrand;
+}) : [];
 
   // Filter sample products by selected brand
   const getSuggestedProducts = () => {
@@ -258,6 +275,23 @@ export default function Products() {
     setTimeout(() => setShowSuccessMessage(false), 3000);
     
     console.log(`Added 1 of ${product.name} to cart`);
+  };
+
+  // Handle AI Post Generation - FIXED VERSION
+  const handleAIPostGeneration = (product) => {
+    console.log('🟢 AI Post button clicked for:', product?.name);
+    
+    // Make sure we have a valid product
+    if (!product) {
+      console.error('🔴 No product provided to AI generator');
+      return;
+    }
+    
+    // Update both states simultaneously
+    setSelectedProduct(product);
+    setShowAIGenerator(true);
+    
+    console.log('🟢 States updated - should show modal now');
   };
 
   const renderStars = (rating) => {
@@ -530,31 +564,42 @@ export default function Products() {
                             {product.description || "Premium quality product with natural ingredients and health benefits."}
                           </p>
 
-                          {/* Quantity and Add to Cart */}
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-3 bg-gray-100 rounded-lg px-3 py-2">
+                          {/* Action Buttons */}
+                          <div className="flex flex-col space-y-3">
+                            {/* Quantity and Add to Cart */}
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center space-x-3 bg-gray-100 rounded-lg px-3 py-2">
+                                <button
+                                  onClick={() => handleQuantityChange(product._id, -1)}
+                                  className="w-6 h-6 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors duration-200 text-gray-600"
+                                >
+                                  −
+                                </button>
+                                <span className="w-8 text-center font-semibold text-gray-800">
+                                  {quantities[product._id] || 0}
+                                </span>
+                                <button
+                                  onClick={() => handleQuantityChange(product._id, 1)}
+                                  className="w-6 h-6 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors duration-200 text-gray-600"
+                                >
+                                  +
+                                </button>
+                              </div>
                               <button
-                                onClick={() => handleQuantityChange(product._id, -1)}
-                                className="w-6 h-6 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors duration-200 text-gray-600"
+                                onClick={() => handleAddToCart(product)}
+                                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-all duration-300 transform hover:scale-105 active:scale-95 font-semibold shadow-md hover:shadow-lg flex items-center space-x-2"
                               >
-                                −
-                              </button>
-                              <span className="w-8 text-center font-semibold text-gray-800">
-                                {quantities[product._id] || 0}
-                              </span>
-                              <button
-                                onClick={() => handleQuantityChange(product._id, 1)}
-                                className="w-6 h-6 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors duration-200 text-gray-600"
-                              >
-                                +
+                                <span>ADD TO CART</span>
                               </button>
                             </div>
+                            
+                            {/* AI Post Generation Button - FIXED */}
                             <button
-                              onClick={() => handleAddToCart(product)}
-                              className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-all duration-300 transform hover:scale-105 active:scale-95 font-semibold shadow-md hover:shadow-lg flex items-center space-x-2"
+                              onClick={() => handleAIPostGeneration(product)}
+                              className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 px-4 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 active:scale-95 font-semibold shadow-md hover:shadow-lg flex items-center justify-center space-x-2 mt-2"
                             >
-                              <span>ADD TO CART</span>
-                              <span className="text-sm">₹{product.discountedPrice ? product.discountedPrice.toFixed(0) : product.price.toFixed(0)}</span>
+                              <span className="text-lg">🤖</span>
+                              <span>GENERATE AI POST</span>
                             </button>
                           </div>
                         </div>
@@ -631,13 +676,23 @@ export default function Products() {
                                 {product.description}
                               </p>
 
-                              {/* Add to Cart Button */}
-                              <button 
-                                onClick={() => handleSuggestedAddToCart(product)}
-                                className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-all duration-300 transform hover:scale-105 active:scale-95 font-semibold shadow-md hover:shadow-lg"
-                              >
-                                ADD TO CART
-                              </button>
+                              {/* Action Buttons */}
+                              <div className="flex flex-col space-y-2">
+                                <button 
+                                  onClick={() => handleSuggestedAddToCart(product)}
+                                  className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-all duration-300 transform hover:scale-105 active:scale-95 font-semibold shadow-md hover:shadow-lg"
+                                >
+                                  ADD TO CART
+                                </button>
+                                {/* AI Post Generation Button - FIXED */}
+                                <button
+                                  onClick={() => handleAIPostGeneration(product)}
+                                  className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 active:scale-95 font-semibold shadow-md hover:shadow-lg flex items-center justify-center space-x-2 mt-2"
+                                >
+                                  <span className="text-lg">🤖</span>
+                                  <span>AI POST</span>
+                                </button>
+                              </div>
                             </div>
                           </div>
                         ))}
@@ -668,6 +723,18 @@ export default function Products() {
           </div>
         </div>
       </div>
+
+      {/* AI Post Generator Modal - FIXED CONDITION */}
+      {showAIGenerator && selectedProduct && (
+        <AIPostGenerator 
+          product={selectedProduct} 
+          onClose={() => {
+            console.log('🟡 Closing AI Generator');
+            setShowAIGenerator(false);
+            setSelectedProduct(null);
+          }} 
+        />
+      )}
     </div>
   );
 }

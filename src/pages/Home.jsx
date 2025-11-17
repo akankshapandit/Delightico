@@ -13,7 +13,7 @@ import teabag from "../assets/teabag.png";
 import wemill2 from "../assets/wemill2.png";
 import moringaBanner from "../assets/moringaBanner.png";
 import { Link } from "react-router-dom";
-// REMOVED the duplicate motion import
+import ChatWidget from "../components/ChatWidget"; // Import the chat widget
 
 const Home = () => {
   const scrollContainerRef = useRef(null);
@@ -108,7 +108,7 @@ const Home = () => {
   }, [currentBanner]);
 
   return (
-    <div className="bg-[#fffbea] w-full">
+    <div className="bg-[#fffbea] w-full relative">
       {/* ===== Improved Banner Section ===== */}
       <section className="w-full relative">
         {/* Banner Container */}
@@ -316,6 +316,9 @@ const Home = () => {
           </motion.div>
         </div>
       </section>
+
+      {/* ===== Chat Widget ===== */}
+      <ChatWidget />
     </div>
   );
 };

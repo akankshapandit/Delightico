@@ -1,4 +1,4 @@
-import useAuth from "../hooks/useAuth";  // ✅ default import
+import { useAuth } from '../context/AuthContext'; // ✅ default import
 
 
 export default function Profile() {
