@@ -1,0 +1,7 @@
+@import "tailwindcss";
+body {
+  @apply font-sans bg-amber-50 text-gray-900 m-0 p-0;
+}
+* {
+  box-sizing: border-box;
+}
