@@ -14,14 +14,25 @@ import paymentRoutes from './routes/payments.js';
 import instagramRoutes from './routes/instagram.js';
 import orderRoutes from './routes/orderRoutes.js';
 
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Route imports
 import authRoutes from './routes/auth.js';
 
+// Load environment variables FIRST
 dotenv.config();
+
+// Validate Stripe key before initializing
+if (!process.env.STRIPE_SECRET_KEY) {
+  console.error('❌ STRIPE_SECRET_KEY is not set in environment variables');
+  process.exit(1);
+}
+
+// Import Stripe after environment variables are loaded
+import Stripe from 'stripe';
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
 connectDB();
 
 const app = express();
@@ -70,8 +81,6 @@ app.use('/api/ai', aiRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/instagram', instagramRoutes);
-app.use('/api/orders', orderRoutes);
-
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -128,4 +137,5 @@ server.listen(PORT, () => {
   console.log(`🔗 CORS enabled for: http://localhost:3000, http://localhost:5173, http://localhost:5174`);
   console.log(`💳 Payment routes available at: http://localhost:${PORT}/api/payments`);
   console.log(`📸 Instagram routes available at: http://localhost:${PORT}/api/instagram`);
+  console.log('✅ Stripe Key loaded successfully');
 });
