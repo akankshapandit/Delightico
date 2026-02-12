@@ -1,12 +1,12 @@
-# React + Vite
+#AI Powered Marketing Tool for E-Commerce Platform
+An AI-driven marketing platform built using the MERN Stack to help small entrepreneurs promote their products efficiently across social media platforms. 
+The system simplifies digital marketing through automation, analytics, and real-time communication.
+#Project Overview
+This platform is designed to support small business owners and entrepreneurs by automating key marketing activities such as content creation, post scheduling, and engagement tracking. It also enables seamless communication between sellers and customers through a real-time chat system.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+#Tech Stack
+Frontend: React.js
+Backend: Node.js, Express.js
+Database: MongoDB
+Real-time Communication: Socket.io
+AI Integration: Automated content generation and engagement insights
